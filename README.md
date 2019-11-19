@@ -1,5 +1,6 @@
 # AutoMapUtility
-实体属性自动映射,支持对象间属性值复制和List复制
+实体属性自动映射,支持对象间属性值复制和List复制  
+Install-Package AutoMapUtility -Version 1.0.2
 ```
 //定义实体，可通过Description指定映射的属性
 public class T
