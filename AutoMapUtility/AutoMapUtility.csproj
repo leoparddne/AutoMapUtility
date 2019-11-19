@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <Description>实体属性自动映射,支持对象间属性值复制和List复制</Description>
+    <Copyright>ives</Copyright>
+    <PackageProjectUrl>https://www.cnblogs.com/ives/p/AutoMapUtility.html</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/leoparddne/AutoMapUtility.git</RepositoryUrl>
+  </PropertyGroup>
+
+</Project>
