@@ -1,50 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace AutoMapUtility
 {
     public static class MapUtility
     {
-        public static T Map<T>(this object obj)  where T: new()
+        public static T Map<T>(this object obj) where T : new()
         {
             var result = new T();
             var properties = obj.GetType().GetProperties();
-                
-            var resultProperties = result.GetType().GetProperties();
-            foreach (var i in properties)
+
+            //存储源对象属性
+            Dictionary<string, PropertyInfo> propertiesDic = new Dictionary<string, PropertyInfo>();
+            //Dictionary<string, PropertyInfo> propertiesDic = properties.ToDictionary(f => f.Name, f => f);
+            foreach (var item in properties)
             {
-                foreach (var j in resultProperties)
+                propertiesDic.Add(item.Name, item);
+            }
+
+            var resultProperties = result.GetType().GetProperties();
+
+            foreach (var j in resultProperties)
+            {
+                try
                 {
-                    try
+                    ////自定义属性处理别名
+                    DescriptionAttribute desc = (DescriptionAttribute)j.GetCustomAttributes(false).FirstOrDefault(f => f.GetType() == typeof(DescriptionAttribute));
+                    if (desc != null)
                     {
-                        var atts = j.GetCustomAttributes(false);
-                        foreach (var item in atts)
-                        {
-                            if (item.GetType() == typeof(DescriptionAttribute))
-                            {
-                                var desName = ((DescriptionAttribute)item).Description;
-                                if (i.Name == desName)
-                                {
-                                    var value = Convert.ChangeType(i.GetValue(obj), j.PropertyType);
-                                    j.SetValue(result, value);
-                                    break;
-                                }
-                            }
-                        }
-                        if (i.Name == j.Name)
-                        {
-                            var value = Convert.ChangeType(i.GetValue(obj),  j.PropertyType);
-                            j.SetValue(result, value);
-                            break;
-                        }
+                        var desName = desc.Description;
+                        j.SetValue(result, propertiesDic[desName].GetValue(obj));
+                        continue;
                     }
-                    catch (Exception)
+                    else
                     {
-                        j.SetValue(result, Activator.CreateInstance(j.PropertyType));
-                        break;
+                        j.SetValue(result, propertiesDic[j.Name].GetValue(obj));
                     }
+                }
+                catch (System.Exception)
+                {
+                    j.SetValue(result, Activator.CreateInstance(j.PropertyType));
                 }
             }
             return result;
