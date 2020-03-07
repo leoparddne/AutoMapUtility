@@ -33,12 +33,18 @@ namespace AutoMapUtility
                     if (desc != null)
                     {
                         var desName = desc.Description;
-                        j.SetValue(result, propertiesDic[desName].GetValue(obj));
-                        continue;
+                        if (propertiesDic.ContainsKey(desName))
+                        {
+                            j.SetValue(result, propertiesDic[desName].GetValue(obj));
+                            continue;
+                        }
                     }
                     else
                     {
-                        j.SetValue(result, propertiesDic[j.Name].GetValue(obj));
+                        if (propertiesDic.ContainsKey(j.Name))
+                        {
+                            j.SetValue(result, propertiesDic[j.Name].GetValue(obj));
+                        }
                     }
                 }
                 catch (System.Exception)
