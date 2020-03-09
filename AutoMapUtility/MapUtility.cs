@@ -49,7 +49,14 @@ namespace AutoMapUtility
                 }
                 catch (System.Exception)
                 {
-                    j.SetValue(result, Activator.CreateInstance(j.PropertyType));
+                    try
+                    {
+                        j.SetValue(result, Activator.CreateInstance(j.PropertyType));
+                    }
+                    catch (System.Exception)
+                    {
+                        Console.WriteLine("转换前后类型不一致");
+                    }
                 }
             }
             return result;
