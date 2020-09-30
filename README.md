@@ -28,7 +28,6 @@ public class T
 ```
 3. 使用方式
 ```
-//使用
 var t = new T { a = 1, b = 2 };
 var t2 = t.Map<T2>();
 Console.WriteLine(JsonConvert.SerializeObject(t2));
